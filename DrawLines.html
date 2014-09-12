@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<TITLE>DrawLines</TITLE>
+		<script type="text/javascript">
+		function Plano(container){
+			this.container = (container)? document.getElementById(container): document.body;
+
+			this.divH;
+			this.A;
+			this.B;
+
+			this.drawPlano = function(){
+				this.divH = this.makeDiv(this.divStyle({"-webkit-transform":0,width:"100%",left:"0px"}));
+				this.container.appendChild(this.divH);
+
+				this.A = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"575px","transform-origin":"0% 100%"}));
+				this.A.innerHTML = "<h1>A</h1>";
+				this.A.style.marginLeft = "-29px";
+				this.container.appendChild(this.A);
+				this.A.x = 575;
+				this.A.y = 323;
+
+				this.B = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"849px","transform-origin":"0% 100%"}));
+				this.B.innerHTML = "<h1>B</h1>";
+				this.B.style.marginLeft = "-29px";
+				this.container.appendChild(this.B);
+				this.B.x = 849;
+				this.B.y = 323;
+				// 575 323
+				// 849 323 
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"575px",border:"5px solid red"}));
+				this.container.appendChild(this.pointA);
+
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"849px",border:"5px solid red"}));
+				this.container.appendChild(this.pointA);
+			};
+			this.drawPlano();
+
+			this.calcPendiente = function(mouseX, mouseY){
+				// console.log(e.pageX, e.pageY);
+					document.getElementById("coordenadas").innerHTML = "("+mouseX+", "+mouseY+") -->Mouse<br> (575, 323) -->A<br> (849, 323) -->B";
+
+					//busco el valor del angulo en grado
+					var y = -(mouseY - this.A.y); //cateto opuesto&=(Se multiplica por - por la forma del plano)
+					var x = (mouseX - this.A.x); //cateto adyacente
+					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px <= Distancia A --> "+this.calcAngulos(x,y);
+					this.A.style["-webkit-transform"] = 'rotate(-'+this.calcAngulos(x,y)+'deg)';//le pongo nuevo grado
+					// this.A.style.width = Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px";//alargo la pendiente hasta el mouse
+
+					var y = -(mouseY - this.B.y); //cateto opuesto&=(Se multiplica por - por la forma del plano)
+					var x = (mouseX - this.B.x); //cateto adyacente
+					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px <= Distancia B --> "+this.calcAngulos(x,y);
+					this.B.style["-webkit-transform"] = 'rotate(-'+this.calcAngulos(x,y)+'deg)';//le pongo nuevo grado
+					// this.B.style.width = Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px";//alargo la pendiente hasta el mouse
+			}
+		}
+
+
+		Plano.prototype.makeDiv = function(style){
+			var div = document.createElement("div");
+
+
+			for(var key in style){
+				div.style[key] = style[key];
+			}
+
+			return div;
+		}
+		Plano.prototype.divStyle = function(style){
+			var json = {
+				border: style["border"] || "2px solid black",
+				width: style["width"] || "100%",
+				height: style["height"] || "0em",
+				"-moz-transform": 'rotate(-'+( style["-moz-transform"] || 0)+'deg)',
+				"-webkit-transform": 'rotate(-'+ (style["-webkit-transform"] || 0) +'deg)',
+				position: style["position"] || "absolute",
+				top: style["top"] || (screen.availWidth / 2 - (20*18))+'px',
+				// left: style["left"] || (screen.availHeight / 2 - (20*18))+'px',
+				left: style["left"] || +'0px',
+				"transform-origin": style["transform-origin"] || "50% 50%"
+			}
+
+			console.log(json);
+
+			return json;
+		}
+		Plano.prototype.calcAngulos = function(x , y){
+			var result = (Math.atan(y/x)*180)/Math.PI;
+
+			if(x < 0 && y > 0){//segundo cuadrante
+				result += 180;
+			}else if(x < 0 && y < 0){//tercer cuadrante
+				result += 180;
+			}else if(x > 0 && y < 0){//cuarto cuadrante
+				result += 360;
+			}
+
+			return result;
+		}
+
+		</script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var Plano1 =  new Plano();
+
+				window.onmousemove = function(e){
+					Plano1.calcPendiente(e.pageX, e.pageY);
+				}
+			}
+
+		</script>
+	</head>
+	<body>
+		<section>
+			<div style="position:absolute; float:right; margin-top:30%;border:2px solid green;width:25em;font-size:18pt;" id="coordenadas">(X1, Y1)<br>(X2, Y2)</div>
+		</section>
+	</body>
+</html>
