@@ -14,14 +14,14 @@
 				this.divH = this.makeDiv(this.divStyle({"-webkit-transform":0,width:"100%",left:"0px"}));
 				this.container.appendChild(this.divH);
 
-				this.A = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"575px","transform-origin":"0% 100%"}));
+				this.A = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"655px","-webkit-transform-origin":"0% 100%"}));
 				this.A.innerHTML = "<h1>A</h1>";
 				this.A.style.marginLeft = "-29px";
 				this.container.appendChild(this.A);
 				this.A.x = 575;
 				this.A.y = 323;
 
-				this.B = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"849px","transform-origin":"0% 100%"}));
+				this.B = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"935px","-webkit-transform-origin":"0% 100%"}));
 				this.B.innerHTML = "<h1>B</h1>";
 				this.B.style.marginLeft = "-29px";
 				this.container.appendChild(this.B);
@@ -29,10 +29,10 @@
 				this.B.y = 323;
 				// 575 323
 				// 849 323 
-				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"575px",border:"5px solid red"}));
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"615px",border:"5px solid red"}));
 				this.container.appendChild(this.pointA);
 
-				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"849px",border:"5px solid red"}));
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"889px",border:"5px solid red"}));
 				this.container.appendChild(this.pointA);
 			};
 			this.drawPlano();
@@ -75,16 +75,18 @@
 				"-moz-transform": 'rotate(-'+( style["-moz-transform"] || 0)+'deg)',
 				"-webkit-transform": 'rotate(-'+ (style["-webkit-transform"] || 0) +'deg)',
 				position: style["position"] || "absolute",
-				top: style["top"] || (screen.availWidth / 2 - (20*18))+'px',
+				top: style["top"] || (screen.availWidth / 2 - (20*20))+'px',
 				// left: style["left"] || (screen.availHeight / 2 - (20*18))+'px',
 				left: style["left"] || +'0px',
-				"transform-origin": style["transform-origin"] || "50% 50%"
+				"transform-origin": style["transform-origin"] || "50% 50%",
+				"-webkit-transform-origin": style["-webkit-transform-origin"] || "50% 50%"
 			}
 
 			console.log(json);
 
 			return json;
 		}
+		
 		Plano.prototype.calcAngulos = function(x , y){
 			var result = (Math.atan(y/x)*180)/Math.PI;
 
@@ -113,7 +115,9 @@
 	</head>
 	<body>
 		<section>
-			<div style="position:absolute; float:right; margin-top:30%;border:2px solid green;width:25em;font-size:18pt;" id="coordenadas">(X1, Y1)<br>(X2, Y2)</div>
+			<div style="position:absolute; float:right; margin-top:30%;border:2px solid green;width:25em;font-size:18pt;" id="coordenadas">
+			    (X1, Y1)<br>(X2, Y2)
+			</div>
 		</section>
 	</body>
 </html>
