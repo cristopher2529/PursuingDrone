@@ -9,30 +9,41 @@
 			this.divH;
 			this.A;
 			this.B;
+			this.C;
 
 			this.drawPlano = function(){
 				this.divH = this.makeDiv(this.divStyle({"-webkit-transform":0,width:"100%",left:"0px"}));
 				this.container.appendChild(this.divH);
 
-				this.A = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"655px","-webkit-transform-origin":"0% 100%"}));
+				//lado izquiero
+				this.A = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"610px","-webkit-transform-origin":"0% 100%"}));
 				this.A.innerHTML = "<h1>A</h1>";
 				this.A.style.marginLeft = "-29px";
 				this.container.appendChild(this.A);
 				this.A.x = 575;
 				this.A.y = 323;
-
-				this.B = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"935px","-webkit-transform-origin":"0% 100%"}));
+				//lado derecho
+				this.B = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"884px","-webkit-transform-origin":"0% 100%"}));
 				this.B.innerHTML = "<h1>B</h1>";
 				this.B.style.marginLeft = "-29px";
 				this.container.appendChild(this.B);
 				this.B.x = 849;
 				this.B.y = 323;
+				
+				this.D = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"5em",left:"747px","-webkit-transform-origin":"0% 100%"}));
+				this.D.innerHTML = "<h1>C</h1>";
+				this.D.style.marginLeft = "-29px";
+				this.container.appendChild(this.D);
+				this.D.x = 712;
+				this.D.y = 323;
+				
+				
 				// 575 323
 				// 849 323 
-				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"615px",border:"5px solid red"}));
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"566px",border:"5px solid red"}));
 				this.container.appendChild(this.pointA);
 
-				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"889px",border:"5px solid red"}));
+				this.pointA = this.makeDiv(this.divStyle({"-webkit-transform":90,width:"1em",left:"840px",border:"5px solid red"}));
 				this.container.appendChild(this.pointA);
 			};
 			this.drawPlano();
@@ -41,18 +52,34 @@
 				// console.log(e.pageX, e.pageY);
 					document.getElementById("coordenadas").innerHTML = "("+mouseX+", "+mouseY+") -->Mouse<br> (575, 323) -->A<br> (849, 323) -->B";
 
+					//distancia constante
+					var la = this.B.x - this.A.x;//LADO A DEL TRIANGULO
+
 					//busco el valor del angulo en grado
 					var y = -(mouseY - this.A.y); //cateto opuesto&=(Se multiplica por - por la forma del plano)
 					var x = (mouseX - this.A.x); //cateto adyacente
-					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px <= Distancia A --> "+this.calcAngulos(x,y);
+					var lb = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));//LADO B DEL TRIANGULO
+					var angB = this.calcAngulos(x,y);
+					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+lb+"px <= Distancia A --> "+this.calcAngulos(x,y);
 					this.A.style["-webkit-transform"] = 'rotate(-'+this.calcAngulos(x,y)+'deg)';//le pongo nuevo grado
-					// this.A.style.width = Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px";//alargo la pendiente hasta el mouse
+					this.A.style.width = lb+"px";//alargo la pendiente hasta el mouse
 
 					var y = -(mouseY - this.B.y); //cateto opuesto&=(Se multiplica por - por la forma del plano)
 					var x = (mouseX - this.B.x); //cateto adyacente
-					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px <= Distancia B --> "+this.calcAngulos(x,y);
+					var lc = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));//LADO C DEL TRIANGULO
+					var angC = 180-this.calcAngulos(x,y);
+					document.getElementById("coordenadas").innerHTML += "<br>(" +x+", "+ y+") = "+lc+"px <= Distancia B --> "+this.calcAngulos(x,y);
 					this.B.style["-webkit-transform"] = 'rotate(-'+this.calcAngulos(x,y)+'deg)';//le pongo nuevo grado
-					// this.B.style.width = Math.sqrt(Math.pow(x,2)+Math.pow(y,2))+"px";//alargo la pendiente hasta el mouse
+					this.B.style.width = lc+"px";//alargo la pendiente hasta el mouse
+					
+					
+					//Ley del coseno //Aplico esta porque aunque ya tengo los angulos, no lo tengo en direccion opuesta
+
+					//angulo C
+					// var angC = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lb,2)-Math.pow(lc,2))/(2*la*lb)));
+					// var angB = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lc,2)-Math.pow(lb,2))/(2*la*lc)));
+					document.getElementById("coordenadas").innerHTML += "<br>Angulo C: "+angB+"+ Angulo B: "+angC+" = "+(angC+angB);
+
 			}
 		}
 
@@ -86,9 +113,13 @@
 
 			return json;
 		}
-		
 		Plano.prototype.calcAngulos = function(x , y){
-			var result = (Math.atan(y/x)*180)/Math.PI;
+			var result
+			if(x && y)//si se le envia en valor de los lados
+				result = (Math.atan(y/x)*180)/Math.PI;
+			else//si se envia el angulo
+				result = (x*180)/Math.PI;
+			
 
 			if(x < 0 && y > 0){//segundo cuadrante
 				result += 180;
