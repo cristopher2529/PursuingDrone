@@ -78,7 +78,16 @@
 					//angulo C
 					// var angC = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lb,2)-Math.pow(lc,2))/(2*la*lb)));
 					// var angB = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lc,2)-Math.pow(lb,2))/(2*la*lc)));
-					document.getElementById("coordenadas").innerHTML += "<br>Angulo C: "+angB+"+ Angulo B: "+angC+" = "+(angC+angB);
+						document.getElementById("coordenadas").innerHTML += "<br>Angulo C: "+angB+"+ Angulo B: "+angC+" = "+(angC+angB);
+					
+					//BUSCO LA MAGNITUD DE LA LINEA CENTRAL(utilizo la ley del coseno)
+					var lmc = Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-(2 *lb *(la/2) *Math.cos(angB)));//lado del medio angulo C
+					// document.getElementById("coordenadas").innerHTML += "<br>Magnitud: "+ lmc;
+					this.D.style.width = lmc+"px";
+					document.getElementById("coordenadas").innerHTML += "<br> 1 "+(Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-Math.abs(2 *lb *(la/2) *Math.cos(angB))));
+					document.getElementById("coordenadas").innerHTML += "<br> 2 "+(lb+"   ->  "+(la/2)+"  ->  "+angB+"  ->  "+Math.cos(angB));
+					document.getElementById("coordenadas").innerHTML += "<br> 3 "+(Math.pow(lb, 2)+"   ->  "+Math.pow(la/2, 2)+"   ->  "+(2 *lb *(la/2) *Math.cos(angB)));
+
 
 			}
 		}
@@ -137,7 +146,11 @@
 			window.onload = function(){
 				var Plano1 =  new Plano();
 
-				window.onmousemove = function(e){
+				// window.onmousemove = function(e){
+				// 	Plano1.calcPendiente(e.pageX, e.pageY);
+				// }
+				
+				window.onclick = function(e){
 					Plano1.calcPendiente(e.pageX, e.pageY);
 				}
 			}
@@ -146,7 +159,7 @@
 	</head>
 	<body>
 		<section>
-			<div style="position:absolute; float:right; margin-top:30%;border:2px solid green;width:25em;font-size:18pt;" id="coordenadas">
+			<div style="position:absolute; float:right; margin-top:30%;border:2px solid green;width:40em;font-size:18pt;" id="coordenadas">
 			    (X1, Y1)<br>(X2, Y2)
 			</div>
 		</section>
