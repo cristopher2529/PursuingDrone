@@ -78,15 +78,19 @@
 					//angulo C
 					// var angC = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lb,2)-Math.pow(lc,2))/(2*la*lb)));
 					// var angB = this.calcAngulos(Math.acos((Math.pow(la,2)+Math.pow(lc,2)-Math.pow(lb,2))/(2*la*lc)));
-						document.getElementById("coordenadas").innerHTML += "<br>Angulo C: "+angB+"+ Angulo B: "+angC+" = "+(angC+angB);
+					
+						// document.getElementById("coordenadas").innerHTML += "<br>Angulo C: "+angB+"+ Angulo B: "+angC+" = "+(angC+angB);
 					
 					//BUSCO LA MAGNITUD DE LA LINEA CENTRAL(utilizo la ley del coseno)
-					var lmc = Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-(2 *lb *(la/2) *Math.cos(angB)));//lado del medio angulo C
+					var lmc = Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-(2 *lb *(la/2) *Math.cos((angB * Math.PI)/180)));//lado del medio angulo C
+					var angD = 360-this.calcAngulos(Math.acos((Math.pow(la/2,2)+Math.pow(lmc,2)-Math.pow(lb,2))/(2*(la/2)*lmc)));
+					
+					document.getElementById("coordenadas").innerHTML += "<br>Angulo D: "+angD+"+ lado LMC: "+lmc;
+					
 					// document.getElementById("coordenadas").innerHTML += "<br>Magnitud: "+ lmc;
 					this.D.style.width = lmc+"px";
-					document.getElementById("coordenadas").innerHTML += "<br> 1 "+(Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-Math.abs(2 *lb *(la/2) *Math.cos(angB))));
-					document.getElementById("coordenadas").innerHTML += "<br> 2 "+(lb+"   ->  "+(la/2)+"  ->  "+angB+"  ->  "+Math.cos(angB));
-					document.getElementById("coordenadas").innerHTML += "<br> 3 "+(Math.pow(lb, 2)+"   ->  "+Math.pow(la/2, 2)+"   ->  "+(2 *lb *(la/2) *Math.cos(angB)));
+					this.D.style["-webkit-transform"] = 'rotate(-'+angD+'deg)';//le pongo nuevo grado
+				
 
 
 			}
@@ -146,13 +150,13 @@
 			window.onload = function(){
 				var Plano1 =  new Plano();
 
-				// window.onmousemove = function(e){
-				// 	Plano1.calcPendiente(e.pageX, e.pageY);
-				// }
-				
-				window.onclick = function(e){
+				window.onmousemove = function(e){
 					Plano1.calcPendiente(e.pageX, e.pageY);
 				}
+				
+				// window.onclick = function(e){
+				// 	Plano1.calcPendiente(e.pageX, e.pageY);
+				// }
 			}
 
 		</script>
