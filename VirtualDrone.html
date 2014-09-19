@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<TITLE>VirtualDrone</TITLE>
+		<script type="text/javascript">
+	      function Drones(container){
+		      this.container = (container)? document.getElementById(container): document.body;
+		      this.listDrone = [];
+		    //  this.run = true;//indica si debe de parar o seguir recorriendo el loop
+		      
+		      this.moveTo = function(x, y){
+		         for(var i=0; i<this.listDrone.length; i++){
+		               this.moveDrone(this.listDrone[i], x, y,x+y*5)
+		         }
+		      }
+		   }
+		   
+		   Drones.prototype.create = function(x, y){
+		      var div = document.createElement('div');
+		      div.x = x;
+		      div.y = y;
+		      div.grd = 0;
+		      
+		      var style = this.droneStyle({"left":x,"top":y});
+		    //  console.log(style);
+		      for(var key in style){
+   				div.style[key] = style[key];
+   			}
+		      
+		      var divH = document.createElement('div');
+		      divH.x = x;
+		      divH.y = y;
+		      divH.grd = 90;
+		      style = this.droneStyle({"left":x,"top":y,"width":"2em",'-webkit-transform':'90',"-webkit-transform-origin":"90% 100%"})
+		      console.log(style);
+		      for(var key in style){
+   				divH.style[key] = style[key];
+   			}
+		      
+		      this.container.appendChild(div);
+		      this.container.appendChild(divH);
+		      this.listDrone.push({div:div, divH:divH});
+		   }
+		   
+		   Drones.prototype.droneStyle = function(style){
+		      return {
+   				border: style["border"] || "2px solid black",
+   				width: style["width"] || "4em",
+   				height: style["height"] || "0em",
+   				"-moz-transform": 'rotate(-'+( style["-moz-transform"] || 0)+'deg)',
+   				"-webkit-transform": 'rotate(-'+ (style["-webkit-transform"] || 0) +'deg)',
+   				position: style["position"] || "absolute",
+   				top: (style["top"] || (screen.availWidth / 2 - (20*20)))+'px',
+   				left: (style["left"] || (screen.availHeight / 2 - (20*18)))+'px',
+   				"transform-origin": style["transform-origin"] || "50% 50%",
+   				"-webkit-transform-origin": style["-webkit-transform-origin"] || "50% 50%",
+   			}
+		   }
+
+         Drones.prototype.moveDrone = function(drone, x, y,grd){
+            drone.div.x = drone.div.x + x;
+            drone.div.style['left'] = drone.div.x+"px";
+            drone.divH.x = drone.divH.x + x;
+            drone.divH.style['left'] = drone.divH.x+"px";
+            drone.div.y =drone.div.y + y;
+            drone.div.style['top'] = drone.div.y+"px";
+            drone.divH.y = drone.divH.y + y;
+            drone.divH.style['top'] = drone.divH.y+"px";
+            
+            drone.div.grd += grd; 
+            drone.div.style['-webkit-transform'] = 'rotate(-'+drone.div.grd+'deg)';
+            
+            drone.divH.grd += grd; 
+            drone.divH.style['-webkit-transform'] = 'rotate(-'+drone.divH.grd+'deg)';
+            
+            console.log("Drone",drone.div.x,drone.div.y,drone.div.style['-webkit-transform'],drone.div.grd,grd);
+         }
+   
+		</script>
+		
+		<script type="text/javascript">
+		   window.onload = function(){
+		      var obj = new Drones();
+		      
+		      obj.create(400,200);
+		      
+		    //  obj.create(500,200);
+
+            setInterval(function(){
+	            var x = Math.floor((Math.random() * 10) + 1)-5;
+	            var y = Math.floor((Math.random() * 10) + 1)-5;
+	            obj.moveTo(x,y);
+	           // console.log(x,y)
+	         },1000);
+
+		   }
+		  
+		</script>
+	</head>
+	
+	<body>
+	   
+	</body>
+</html>

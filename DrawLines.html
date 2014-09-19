@@ -83,9 +83,12 @@
 					
 					//BUSCO LA MAGNITUD DE LA LINEA CENTRAL(utilizo la ley del coseno)
 					var lmc = Math.sqrt(Math.pow(lb, 2)+Math.pow(la/2, 2)-(2 *lb *(la/2) *Math.cos((angB * Math.PI)/180)));//lado del medio angulo C
-					var angD = 360-this.calcAngulos(Math.acos((Math.pow(la/2,2)+Math.pow(lmc,2)-Math.pow(lb,2))/(2*(la/2)*lmc)));
+					var angD = 180-this.calcAngulos(Math.acos((Math.pow(la/2,2)+Math.pow(lmc,2)-Math.pow(lb,2))/(2*(la/2)*lmc)));
 					
-					document.getElementById("coordenadas").innerHTML += "<br>Angulo D: "+angD+"+ lado LMC: "+lmc;
+					var prue = Math.acos((Math.pow(la/2,2)+Math.pow(lmc,2)-Math.pow(lb,2))/(2*(la/2)*lmc));
+					prue = this.calcAngulos360(prue);
+					
+					document.getElementById("coordenadas").innerHTML += "<br>Angulo D: "+angD+"+ lado LMC: "+lmc+"   "+prue;
 					
 					// document.getElementById("coordenadas").innerHTML += "<br>Magnitud: "+ lmc;
 					this.D.style.width = lmc+"px";
@@ -141,6 +144,22 @@
 			}else if(x > 0 && y < 0){//cuarto cuadrante
 				result += 360;
 			}
+
+			return result;
+		}
+		Plano.prototype.calcAngulos360 = function(x , y){
+			var result
+			if(x && y)//si se le envia en valor de los lados
+				result = (Math.atan(y/x)*180)/Math.PI;
+			else//si se envia el angulo
+				result = (x*180)/Math.PI;
+			
+
+			// if(y > 0){//segundo cuadrante
+			// 	result -= 0;
+			// }else {
+			// 	result += 180;
+			// }
 
 			return result;
 		}
