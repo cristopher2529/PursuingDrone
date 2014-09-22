@@ -10,18 +10,52 @@
 		      
 		      this.moveTo = function(x, y){
 		         for(var i=0; i<this.listDrone.length; i++){
-		               this.moveDrone(this.listDrone[i], x, y,x+y*5)
+		            
+		               var vector = this.calcAng(this.listDrone[i].div.x,
+		                  this.listDrone[i].div.y,
+		                  this.listDrone[i].div.x2,
+		                  this.listDrone[i].div.y2,
+		                  x,y);
+		             //  this.moveDrone(this.listDrone[i], x, y,x+y*5)
+		             
+		             this.listDrone[i].liz.style["-webkit-transform"] = 'rotate(-'+vector.ang1+'deg)';
+		             this.listDrone[i].lde.style["-webkit-transform"] = 'rotate(-'+vector.ang2+'deg)';
+		             this.listDrone[i].liz.style.width = vector.hipo1+"px";
+		             this.listDrone[i].lde.style.width = vector.hipo2+"px";
 		         }
 		      }
+		      
+		      
 		   }
 		   
 		   Drones.prototype.create = function(x, y){
 		      var div = document.createElement('div');
 		      div.x = x;
 		      div.y = y;
+		      div.x2 = x+50;
+		      div.y2 = y;
 		      div.grd = 0;
 		      
-		      var style = this.droneStyle({"left":x,"top":y});
+		      //creo los puntos a los bordes
+		      this.createPoint(x, y);
+		      this.createPoint(x+50, y);
+		     
+				//creo los lados a mover
+				var liz = document.createElement('div');
+				var lde = document.createElement('div');
+				
+				var style = this.droneStyle({"left":div.x,"top":div.y,"width":"0px"
+				,"-webkit-transform-origin":"0% 50%",'-webkit-transform':'90'});
+				for(var key in style){
+   				liz.style[key] = style[key];
+   			}
+   			style = this.droneStyle({"left":div.x2+18,"top":div.y2,"width":"0px"
+				,"-webkit-transform-origin":"0% 50%",'-webkit-transform':'90'});
+				for(var key in style){
+   				lde.style[key] = style[key];
+   			}
+			      
+		      style = this.droneStyle({"left":x,"top":y});
 		    //  console.log(style);
 		      for(var key in style){
    				div.style[key] = style[key];
@@ -39,7 +73,27 @@
 		      
 		      this.container.appendChild(div);
 		      this.container.appendChild(divH);
-		      this.listDrone.push({div:div, divH:divH});
+		      this.container.appendChild(liz);
+		      this.container.appendChild(lde);
+		      this.listDrone.push({div:div, divH:divH, liz:liz, lde:lde});
+		   }
+		   
+		   Drones.prototype.createPoint = function(x, y){
+		   	var div = document.createElement('div');
+		   	
+		   	var style = this.droneStyle({"left":x,"top":y,"width":"1em","height":"1em"});
+		   	div.innerHTML = "("+x+","+y+")";
+		   	style["background-color"] = "#CC181E";
+		   	style["border-radius"] = "10em";
+		   	style["border-color"] = "#EEEEEE";
+		   	style["font-size"] = "0.8em";
+		   	style["color"] = "blue";
+		    //  console.log(style);
+		      for(var key in style){
+   				div.style[key] = style[key];
+   			}
+   			
+   			this.container.appendChild(div);
 		   }
 		   
 		   Drones.prototype.droneStyle = function(style){
@@ -73,8 +127,47 @@
             drone.divH.grd += grd; 
             drone.divH.style['-webkit-transform'] = 'rotate(-'+drone.divH.grd+'deg)';
             
-            console.log("Drone",drone.div.x,drone.div.y,drone.div.style['-webkit-transform'],drone.div.grd,grd);
+            console.log(drone.div.grd, grd)
          }
+         
+         
+         //busco las distancias y el angulo
+         Drones.prototype.calcAng = function(x1, y1, x2, y2, pointX, pointY){
+         	this.createPoint(pointX, pointY);
+         	var hipo1 = this.hipotenusa(pointX-x1, pointY-y1);
+         	var ang1 = -this.tanAng(pointX-x1, pointY-y1);
+         	var hipo2 = this.hipotenusa(pointX-x2, pointY-y2);
+         	var ang2 = -this.tanAng(pointX-x2, pointY-y2);
+         	
+            console.log(hipo1, ang1);
+            console.log(hipo2, ang2);
+            console.log("------------------------------------------------")
+            return {"hipo1":hipo1, "ang1":ang1, "hipo2":hipo2, "ang2":ang2};
+         }
+         
+         //busco la hipotenusa, la cual es la longitud del angulos
+         Drones.prototype.hipotenusa = function(X, Y){
+            return Math.sqrt(Math.pow(X,2)+Math.pow(Y,2));
+         }
+         //busco el angulo con  la tangente[se retorna en grado]
+         Drones.prototype.calcAngulos = function(x , y){
+				var result
+				if(x && y)//si se le envia en valor de los lados
+					result = (Math.atan(y/x)*180)/Math.PI;
+				else//si se envia el angulo
+					result = (x*180)/Math.PI;
+				
+	
+				if(x < 0 && y > 0){//segundo cuadrante
+					result += 180;
+				}else if(x < 0 && y < 0){//tercer cuadrante
+					result += 180;
+				}else if(x > 0 && y < 0){//cuarto cuadrante
+					result += 360;
+				}
+	
+				return result;
+			}
    
 		</script>
 		
@@ -82,16 +175,20 @@
 		   window.onload = function(){
 		      var obj = new Drones();
 		      
-		      obj.create(400,200);
+		      obj.create(400,400);
 		      
 		    //  obj.create(500,200);
 
-            setInterval(function(){
-	            var x = Math.floor((Math.random() * 10) + 1)-5;
-	            var y = Math.floor((Math.random() * 10) + 1)-5;
-	            obj.moveTo(x,y);
-	           // console.log(x,y)
-	         },1000);
+         //    setInterval(function(){
+	        //    var x = Math.floor((Math.random() * 10) + 1)-5;
+	        //    var y = Math.floor((Math.random() * 10) + 1)-5;
+	        //    obj.moveTo(x,y);
+	        //   // console.log(x,y)
+	        // },1000);
+	         
+	         window.onclick = function(e){
+	            obj.moveTo(e.pageX, e.pageY);
+	         }
 
 		   }
 		  
