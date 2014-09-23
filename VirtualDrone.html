@@ -18,10 +18,13 @@
 		                  x,y);
 		             //  this.moveDrone(this.listDrone[i], x, y,x+y*5)
 		             
-		             this.listDrone[i].liz.style["-webkit-transform"] = 'rotate(-'+vector.ang1+'deg)';
-		             this.listDrone[i].lde.style["-webkit-transform"] = 'rotate(-'+vector.ang2+'deg)';
+		             this.listDrone[i].liz.style["-webkit-transform"] = 'rotate('+vector.ang1+'deg)';
+		             this.listDrone[i].lde.style["-webkit-transform"] = 'rotate('+vector.ang2+'deg)';
 		             this.listDrone[i].liz.style.width = vector.hipo1+"px";
 		             this.listDrone[i].lde.style.width = vector.hipo2+"px";
+		             var grd = 180-(vector.ang2>vector.ang1)? (vector.ang2-vector.ang1)/2 +vector.ang1: (vector.ang1-vector.ang2)/2 +vector.ang2;
+		             console.log(grd)
+		             this.listDrone[i].divH.style["-webkit-transform"] = 'rotate('+grd+'deg)';
 		         }
 		      }
 		      
@@ -135,9 +138,9 @@
          Drones.prototype.calcAng = function(x1, y1, x2, y2, pointX, pointY){
          	this.createPoint(pointX, pointY);
          	var hipo1 = this.hipotenusa(pointX-x1, pointY-y1);
-         	var ang1 = -this.tanAng(pointX-x1, pointY-y1);
+         	var ang1 = this.tanAng(pointX-x1, pointY-y1);
          	var hipo2 = this.hipotenusa(pointX-x2, pointY-y2);
-         	var ang2 = -this.tanAng(pointX-x2, pointY-y2);
+         	var ang2 = this.tanAng(pointX-x2, pointY-y2);
          	
             console.log(hipo1, ang1);
             console.log(hipo2, ang2);
@@ -150,7 +153,7 @@
             return Math.sqrt(Math.pow(X,2)+Math.pow(Y,2));
          }
          //busco el angulo con  la tangente[se retorna en grado]
-         Drones.prototype.calcAngulos = function(x , y){
+         Drones.prototype.tanAng = function(x , y){
 				var result
 				if(x && y)//si se le envia en valor de los lados
 					result = (Math.atan(y/x)*180)/Math.PI;
@@ -176,7 +179,9 @@
 		      var obj = new Drones();
 		      
 		      obj.create(400,400);
-		      
+		      // obj.create(700,400);
+		      // obj.create(500,500);
+		      // obj.create(600,300);
 		    //  obj.create(500,200);
 
          //    setInterval(function(){
