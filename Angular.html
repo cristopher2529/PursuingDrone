@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html ng-app="" >
+   <head>
+      <title>Angular JS</title>
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+      
+      
+   </head>
+   <body>
+      <div ng-init="MonthsPerYear=12">
+       	<p>My nombre es {{(21*MonthsPerYear)+" meses"}}</p>
+       	<p>Tengo <span ng-bind="(12 * MonthsPerYear)+'meses'"></span></p>
+      </div>
+
+      <div ng-init="firstName='John'">
+         <p>Text: <input type="text" ng-model="firstName"/></p>
+         <p>You Wrote: <span ng-bind="firstName"></span></p>
+      </div>
+
+      <div ng-init="quantity=5;price=10;">
+         Quantity: <input type="text" ng-model="quantity"/>
+         price: <input type="text" ng-model="price"/>
+         Total: {{quantity * price}}
+      </div>
+      
+      <div ng-init="quantity=1;price=5">
+         Quantity: <input type="number"	ng-model="quantity">
+         Costs:    <input type="number" ng-model="price">
+         
+         Total in dollar: {{ quantity * price }}
+      </div>
+      
+      <div ng-init="names=['Cristopher','Carlos','Fernando']">
+         <ul>
+            <li ng-repeat="x in names">
+               {{"Nombre: "+x}}
+            </li>
+         </ul>
+      </div>
+      
+      
+      
+      <div ng-controller="personController">
+         FirstName: <input type="text" ng-model="person.firstName"/>
+         LastName: <input type="text" ng-model="person.lastName"/>
+         {{person.fullName() | uppercase}}
+      </div>
+      <script>
+            function personController($scope){
+               $scope.person={
+                  firstName: "Cristopher",
+                  lastName: "Jimenez",
+                  fullName: function(){
+                     return $scope.person.firstName+"  "+$scope.person.lastName;
+                  }
+               };
+            }
+      </script>
+      
+      
+      <br>
+      <div ng-controller="searchPerson">
+         Name: <input type="text" ng-model="person.firstName"/>
+         <ul>
+            <li ng-repeat="x in person | filter:person.firstName | orderBy:'lastName' ">
+               {{(x.firstName|uppercase) +' '+x.lastName }}
+            </li>
+         </ul>
+      </div>
+      <script type="text/javascript">
+         function searchPerson($scope){
+            $scope.person = [
+               {firstName: 'Cristopher',lastName:'Jimenez'},
+               {firstName: 'Carlos', lastName: 'Rosario'},
+               {firstName: 'Carlos', lastName: 'Fulvio'},
+               {firstName: 'Fernando', lastName:'Rojas'}
+            ]
+         }
+      </script>
+
+      
+      <br>
+      <div ng-controller="httpConsult">
+         <ul>
+            <li ng-repeat="x in names">
+               {{ x.Name+"  City: "+x.City+"  Country "+ x.Country}}
+            </li>
+         </ul>
+      </div>
+      <div ng-controller="httpConsult">
+         <table style="border:5px solid black;">
+            <tr ng-repeat="x in names">
+               <td>{{ x.Name }}</td>
+               <td>{{ x.City }}</td>
+               <td>{{ x.Country }}</td>
+            </tr>
+         </table>
+      </div>
+      <script>
+         function httpConsult($scope, $http){
+            $http.get("https://mate-c9-cristopher2529.c9.io/project/PursuingDrone/Json.php")
+            .success(function(response){ 
+                                          console.log(response);
+                                          $scope.names = response;
+                                       });
+         }
+      </script>
+
+   </body>
+</html>
