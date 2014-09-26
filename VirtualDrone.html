@@ -22,9 +22,16 @@
 		             this.listDrone[i].lde.style["-webkit-transform"] = 'rotate('+vector.ang2+'deg)';
 		             this.listDrone[i].liz.style.width = vector.hipo1+"px";
 		             this.listDrone[i].lde.style.width = vector.hipo2+"px";
-		             var grd = 180-(vector.ang2>vector.ang1)? (vector.ang2-vector.ang1)/2 +vector.ang1: (vector.ang1-vector.ang2)/2 +vector.ang2;
-		             console.log(grd)
+		             var grd = (vector.ang2>vector.ang1)? (vector.ang2-vector.ang1)/2 +vector.ang1: (vector.ang1-vector.ang2)/2 +vector.ang2;
+		             var cateto = (vector.hipo2>vector.hipo1)? (vector.hipo2-vector.hipo1)/2 +vector.hipo1: (vector.hipo1-vector.hipo2)/2 +vector.hipo2;
+		             //grd -= 180;
+		             //cateto = cateto-180;
+		             console.log(grd, cateto)
 		             this.listDrone[i].divH.style["-webkit-transform"] = 'rotate('+grd+'deg)';
+		             this.listDrone[i].divH.style.width = cateto+"px";
+		             
+		             
+		             this.moveDrone2(this.listDrone[i], cateto, grd);
 		         }
 		      }
 		      
@@ -65,10 +72,10 @@
    			}
 		      
 		      var divH = document.createElement('div');
-		      divH.x = x;
+		      divH.x = x+30;
 		      divH.y = y;
 		      divH.grd = 90;
-		      style = this.droneStyle({"left":x,"top":y,"width":"2em",'-webkit-transform':'90',"-webkit-transform-origin":"90% 100%"})
+		      style = this.droneStyle({"left":x+30,"top":y,"width":"2em",'-webkit-transform':'90',"-webkit-transform-origin":"0% 50%"})
 		      console.log(style);
 		      for(var key in style){
    				divH.style[key] = style[key];
@@ -114,7 +121,7 @@
    			}
 		   }
 
-         Drones.prototype.moveDrone = function(drone, x, y,grd){
+          Drones.prototype.moveDrone = function(drone, x, y,grd){
             drone.div.x = drone.div.x + x;
             drone.div.style['left'] = drone.div.x+"px";
             drone.divH.x = drone.divH.x + x;
@@ -130,9 +137,27 @@
             drone.divH.grd += grd; 
             drone.divH.style['-webkit-transform'] = 'rotate(-'+drone.divH.grd+'deg)';
             
-            console.log(drone.div.grd, grd)
+            console.log(drone.div.grd, grd);
          }
          
+         Drones.prototype.moveDrone2 = function(drone, mag,grd){
+            drone.div.x +=  (10 * Math.cos(grd));
+            drone.div.style['left'] = drone.div.x+"px";
+            drone.divH.x += (10 * Math.cos(grd));
+            drone.divH.style['left'] = drone.divH.x+"px";
+            drone.div.y += (10 * Math.sin(grd));
+            drone.div.style['top'] = drone.div.y+"px";
+            drone.divH.y += (10 * Math.sin(grd));
+            drone.divH.style['top'] = drone.divH.y+"px";
+            
+            drone.div.grd += grd; 
+            drone.div.style['-webkit-transform'] = 'rotate(-'+drone.div.grd+'deg)';
+            
+            drone.divH.grd += grd; 
+            drone.divH.style['-webkit-transform'] = 'rotate(-'+drone.divH.grd+'deg)';
+            
+            console.log(drone.div.grd, grd);
+         }
          
          //busco las distancias y el angulo
          Drones.prototype.calcAng = function(x1, y1, x2, y2, pointX, pointY){
