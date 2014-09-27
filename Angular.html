@@ -23,6 +23,10 @@
    
    
    <div ng-controller="userTable">
+      <input type="text" ng-model="fName"/>
+      <input type="text" ng-model="lName"/>
+      <input type="text" ng-model="Password"/>
+      <button class="btn" ng-click="add()"><span class="fa fa-plus-square">Add</span></button></button>
       <table class="table table-hover table-striped table-condensed">
          <thead class="">
             <tr class="success">
@@ -30,6 +34,7 @@
                <th>Nombre</th>
                <th>Apellido</th>
                <th>Password</th>
+               <th>Delete</th>
             </tr>
          </thead>
          <tbody>
@@ -40,6 +45,9 @@
                <td>{{user.fName}}</td>
                <td>{{user.lName}}</td>
                <td>{{user.Password}}</td>
+               <td>
+                  <button class="btn" ng-click="delete(user.id)"><span class="fa fa-power-off"></span></button></button>
+               </td>
             </tr>
          </tbody>
       </table>
@@ -59,6 +67,12 @@
             $scope.fName = $scope.users[id-1].fName;
             $scope.lName = $scope.users[id-1].lName;
             $scope.Password = $scope.users[id-1].Password;
+         }
+         $scope.add = function(){
+            $scope.users.push({id:$scope.users.length, fName:$scope.fName,  lName:$scope.lName ,  Password:$scope.Password });
+         }
+         $scope.delete = function(id){
+            $scope.users.splice(id-1, 1);
          }
       }
    </script>
