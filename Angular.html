@@ -2,10 +2,17 @@
 <html ng-app="" >
    <head>
       <title>Angular JS</title>
+
       
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-      
-      
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+      <style type="text/css">
+         th{
+            padding: 1em;
+         }
+      </style>
    </head>
    <body>
    
@@ -15,8 +22,46 @@
    </div>
    
    
-   
-   
+   <div ng-controller="userTable">
+      <table class="table table-hover table-striped table-condensed">
+         <thead class="">
+            <tr class="success">
+               <th>Editar</th>
+               <th>Nombre</th>
+               <th>Apellido</th>
+               <th>Password</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr ng-repeat="user in users">
+               <td>
+                  <button class="btn" ng-click="print(user.id)"><span class="fa fa-pencil-square"></span></button></button>
+               </td>
+               <td>{{user.fName}}</td>
+               <td>{{user.lName}}</td>
+               <td>{{user.Password}}</td>
+            </tr>
+         </tbody>
+      </table>
+      <p>{{fName+" "+lName+" "+Password}}</p>
+   </div>
+   <script type="text/javascript">
+      function userTable($scope){
+         $scope.users = [
+               {id:1, fName:'Hege',  lName:"Pege" ,  Password:"1234" },
+               {id:2, fName:'Kim',   lName:"Pim" ,  Password:"1234" },
+               {id:3, fName:'Sal',   lName:"Smith" ,  Password:"1234" },
+               {id:4, fName:'Jack',  lName:"Jones" ,  Password:"1234" },
+               {id:5, fName:'John',  lName:"Doe" ,  Password:"1234" },
+               {id:6, fName:'Peter', lName:"Pan" ,  Password:"1234" }
+            ];
+         $scope.print = function(id){
+            $scope.fName = $scope.users[id-1].fName;
+            $scope.lName = $scope.users[id-1].lName;
+            $scope.Password = $scope.users[id-1].Password;
+         }
+      }
+   </script>
    
    
    
@@ -43,7 +88,6 @@
       <div ng-init="quantity=1;price=5">
          Quantity: <input type="number"	ng-model="quantity">
          Costs:    <input type="number" ng-model="price">
-         
          Total in dollar: {{ quantity * price }}
       </div>
       
@@ -132,6 +176,8 @@
       </div>
       
       
-
+            
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+            
    </body>
 </html>
