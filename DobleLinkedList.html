@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html ng-app="" >
+   <head>
+      <title>Dinamic Array JS</title>
+
+      
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+      <style type="text/css">
+         th{
+            padding: 1em;
+         }
+      </style>
+      
+      <script type="text/javascript">
+         function Nodo(value){
+            this.value = value;
+            this.nxt = null;
+            this.bck = null;
+         }
+         
+         function DArray(){
+            this.head = null;
+            this.tail = null;
+            this.len = 0;
+            
+            this.push = function(value){
+               // console.log(value)
+               var nw = new Nodo(value);
+               
+               if(this.head == null){
+                  this.head = nw;
+                  this.tail = this.head;
+                  this.len++;
+               }else{
+                  nw.bck = this.tail
+                  this.tail.nxt = nw;
+                  this.tail = nw;
+                  this.len++;
+               }
+            }
+
+            this.add = function(x, value){
+               var nw = new Nodo(value);
+
+               if(x <= 0){
+                  if(this.head == null){//si es Cero y es el primero entonces se agrega solo
+                     this.head = nw;
+                     this.tail = this.head;
+                  }else{//si ya existen y lo agregan en la posicion cero enconces troceden el head
+                     nw.nxt = this.head;
+                     this.head.bck = nw;
+                     this.head = nw;
+                  }
+               }else if(x < this.len){//si se va a agregar en el medio del arreglo
+                  var before = this.head;
+                  for (var i = 0; i < x-1; i++) {
+                     before = before.nxt;
+                  };
+
+                  nw.nxt = before.nxt;
+                  nw.bck = before;
+
+                  before.nxt.bck = nw;
+                  before.nxt = nw;
+                  
+               }else{//si lo agregan en un numero mas grande que el tamaño de la lista entonces lo agrega en la ultima posicion
+                  this.push(value);
+               }
+
+               this.len++;
+            }
+            
+            this.pop = function(){
+               if(this.len>0){//envio la cola un paso atras y elimino el siguien
+                  var value = this.tail.value;
+                  this.tail = this.tail.bck;
+                  this.tail.nxt = null;
+                  this.len--;
+                  return value;
+               }else{//si el array esta vacio
+                  return null;
+               }
+            }
+
+            this.print = function(){
+               var now = this.head;
+               
+               while(now != null){
+                  console.log(now.value);
+                  now = now.nxt;
+               }
+            }
+            
+            this.get = function(x){
+               if(x <= 0){//si se llama a la primera posicion
+                  return this.head.value;
+               }else if(x < this.len){//si se llama a la posicion del medio
+                  var now =  this.head;
+                  for (var i = 0; i < x; i++) {
+                     now = now.nxt;
+                  };
+
+                  return now.value;
+               }else{//si se llama a la ultima posicion
+                  return this.tail.value;
+               }
+            }
+
+            this.set = function(x,value){
+               if(x <= 0){//si se llama a la primera posicion
+                  this.head.value = value;
+               }else if(x < this.len){//si se llama a la posicion del medio
+                  var now =  this.head;
+                  for (var i = 0; i < x; i++) {
+                     now = now.nxt;
+                  };
+
+                  now.value = value;
+               }else{//si se llama a la ultima posicion
+                  this.tail.value = value;
+               }
+            }
+
+            this.reverse = function(){
+               var nw = this.tail;
+
+               while(nw != null){
+                  console.log(nw);
+                  nw = nw.bck;
+               }
+            }
+
+         }
+         
+			window.onload = function(){
+            var arr =  new DArray();
+            
+            arr.add(0,9);
+            arr.push(5);
+            arr.push(4);
+            arr.push(8);
+            arr.push(3);
+            arr.push(2);
+            arr.add(2,1);
+            arr.add(-15,10);
+            // console.log(arr.len+"sadsd"+this.head)
+            arr.print();
+            console.log("\n\n")
+
+            console.log(arr.pop());
+            console.log(arr.pop());
+
+            console.log("\n\n")
+            arr.print();
+            console.log(arr.get(4)," <-get(4)");
+            console.log(arr.get(-5)," <-get(-5)");
+            console.log(arr.get(40)," <-get(40)");
+
+            console.log(arr.set(3,-0)," <-set(3,-0)");
+            console.log(arr.set(-5,-0)," <-set(-5,-0)");
+            console.log(arr.set(40,-0)," <-set(40,-0)");
+            arr.print();
+            arr.reverse();
+         }
+      </script>
+   </head>
+   <body>
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+            
+   </body>
+</html>

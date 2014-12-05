@@ -15,7 +15,25 @@
       </style>
    </head>
    <body>
-   
+      
+   <div ng-controller="watchExample">
+      <input type="text" ng-model="name"/>
+      <input type="text" ng-model="apellido"/>
+   </div>
+   <script>
+      function watchExample($scope){
+         $scope.name = "Cristopher";
+         
+         $scope.$watch(function(scope){ return scope.name;}, function(newValue, oldValue){
+            console.log(newValue, oldValue);
+         });
+         $scope.$watch(function(){
+            console.log("Watch");
+         });
+      }
+   </script><br>
+      
+   <!------------------------------------------------------------------------------------------------------------------------->
    <div ng-init="cont=0">
       <p ng-click="cont = cont + 1">Click me!</p>
       <p>{{cont}}</p>
